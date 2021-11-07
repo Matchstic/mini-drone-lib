@@ -60,7 +60,7 @@ def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, leftTrim 
     if endByte < 0x0:
         endByte = 0x0 - endByte
     elif endByte > 0xff:
-        endByte = endByte - 0xff
+        endByte = endByte - 0xff - 1
 
     return header + struct.pack('BBBBBBBBB', int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, pitchTrim, rightTrim, command, int(endByte))
 
@@ -116,13 +116,29 @@ def keycodeThread():
         else:
             controlState['throttle'] = 0.5
 
-        # pitch
+        # roll
         if key == keys.LEFT:
-            controlState['pitch'] = 0.0
+            controlState['roll'] = 0.3
         elif key == keys.RIGHT:
-            controlState['pitch'] = 1.0
+            controlState['roll'] = 0.7
+        else:
+            controlState['roll'] = 0.5
+
+        # pitch
+        if key == 'w':
+            controlState['pitch'] = 0.3
+        elif key == 's':
+            controlState['pitch'] = 0.7
         else:
             controlState['pitch'] = 0.5
+
+        # yaw - note: its 100% or 0% for yaw, no scaling
+        if key == 'a':
+            controlState['yaw'] = 0.0
+        elif key == 'd':
+            controlState['yaw'] = 1.0
+        else:
+            controlState['yaw'] = 0.5
 
         lastKeyChange = int(round(time.time() * 1000))
 

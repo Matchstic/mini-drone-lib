@@ -48,7 +48,9 @@ header          throttle            yaw        pitch       roll       left trim 
 
 Note: pitch 0 == pitch forward
       roll 0  == roll left
-      
+
+      yaw only starts rotating at maxima and minima. i.e., 00 OR 7f, no scaling between.
+
 What is that last param? It combines all the throttle/yaw/pitch/roll/trims and is inversely proportional to each one
 
 examples
