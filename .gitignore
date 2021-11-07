@@ -1,0 +1,6 @@
+working/
+*.hop
+*.out
+*.dylib
+*.mm
+*.deb

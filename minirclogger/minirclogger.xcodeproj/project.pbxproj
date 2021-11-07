@@ -1,0 +1,396 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C97B1D852736DB770018C9AD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C97B1D842736DB770018C9AD /* Foundation.framework */; };
+		C97B1D902736DB770018C9AD /* minirclogger.mm in Sources */ = {isa = PBXBuildFile; fileRef = C97B1D8F2736DB770018C9AD /* minirclogger.mm */; };
+		C9E862782736DBF200BBFAE1 /* libsubstrate.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C9E862772736DBF200BBFAE1 /* libsubstrate.tbd */; };
+		C9E862812736E39100BBFAE1 /* minirclogger-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = C9E8627F2736E39100BBFAE1 /* minirclogger-Prefix.pch */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C97B1D812736DB770018C9AD /* minirclogger.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = minirclogger.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		C97B1D842736DB770018C9AD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C97B1D892736DB770018C9AD /* control.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = control.txt; sourceTree = "<group>"; };
+		C97B1D8A2736DB770018C9AD /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
+		C97B1D8E2736DB770018C9AD /* minirclogger.xm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; path = minirclogger.xm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C97B1D8F2736DB770018C9AD /* minirclogger.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = minirclogger.mm; sourceTree = "<group>"; };
+		C97B1D942736DB770018C9AD /* minirclogger.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = minirclogger.plist; sourceTree = "<group>"; };
+		C9E862772736DBF200BBFAE1 /* libsubstrate.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsubstrate.tbd; path = ../../../../../opt/iOSOpenDev/lib/libsubstrate.tbd; sourceTree = "<group>"; };
+		C9E8627F2736E39100BBFAE1 /* minirclogger-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "minirclogger-Prefix.pch"; path = "minirclogger/minirclogger-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		C9E862802736E39100BBFAE1 /* PackageVersion.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = PackageVersion.plist; path = minirclogger/PackageVersion.plist; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C97B1D7C2736DB770018C9AD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C97B1D852736DB770018C9AD /* Foundation.framework in Frameworks */,
+				C9E862782736DBF200BBFAE1 /* libsubstrate.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C97B1D752736DB770018C9AD = {
+			isa = PBXGroup;
+			children = (
+				C97B1D862736DB770018C9AD /* minirclogger */,
+				C97B1D832736DB770018C9AD /* Frameworks */,
+				C97B1D822736DB770018C9AD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C97B1D822736DB770018C9AD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D812736DB770018C9AD /* minirclogger.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C97B1D832736DB770018C9AD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9E862772736DBF200BBFAE1 /* libsubstrate.tbd */,
+				C97B1D842736DB770018C9AD /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C97B1D862736DB770018C9AD /* minirclogger */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D8E2736DB770018C9AD /* minirclogger.xm */,
+				C97B1D8F2736DB770018C9AD /* minirclogger.mm */,
+				C97B1D872736DB770018C9AD /* Package */,
+				C97B1D8B2736DB770018C9AD /* Supporting Files */,
+			);
+			path = minirclogger;
+			sourceTree = "<group>";
+		};
+		C97B1D872736DB770018C9AD /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D882736DB770018C9AD /* DEBIAN */,
+				C97B1D912736DB770018C9AD /* Library */,
+			);
+			path = Package;
+			sourceTree = "<group>";
+		};
+		C97B1D882736DB770018C9AD /* DEBIAN */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D892736DB770018C9AD /* control.txt */,
+				C97B1D8A2736DB770018C9AD /* control */,
+			);
+			path = DEBIAN;
+			sourceTree = "<group>";
+		};
+		C97B1D8B2736DB770018C9AD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C9E8627F2736E39100BBFAE1 /* minirclogger-Prefix.pch */,
+				C9E862802736E39100BBFAE1 /* PackageVersion.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C97B1D912736DB770018C9AD /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D922736DB770018C9AD /* MobileSubstrate */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		C97B1D922736DB770018C9AD /* MobileSubstrate */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D932736DB770018C9AD /* DynamicLibraries */,
+			);
+			path = MobileSubstrate;
+			sourceTree = "<group>";
+		};
+		C97B1D932736DB770018C9AD /* DynamicLibraries */ = {
+			isa = PBXGroup;
+			children = (
+				C97B1D942736DB770018C9AD /* minirclogger.plist */,
+			);
+			path = DynamicLibraries;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		C97B1D7D2736DB770018C9AD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9E862812736E39100BBFAE1 /* minirclogger-Prefix.pch in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		C97B1D802736DB770018C9AD /* minirclogger */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C97B1D972736DB770018C9AD /* Build configuration list for PBXNativeTarget "minirclogger" */;
+			buildPhases = (
+				C97B1D7A2736DB770018C9AD /* ShellScript */,
+				C97B1D7B2736DB770018C9AD /* Sources */,
+				C97B1D7C2736DB770018C9AD /* Frameworks */,
+				C97B1D7D2736DB770018C9AD /* Headers */,
+				C97B1D7E2736DB770018C9AD /* arm64e build */,
+				C97B1D7F2736DB770018C9AD /* Package */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = minirclogger;
+			productName = minirclogger;
+			productReference = C97B1D812736DB770018C9AD /* minirclogger.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C97B1D762736DB770018C9AD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					C97B1D802736DB770018C9AD = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+				};
+			};
+			buildConfigurationList = C97B1D792736DB770018C9AD /* Build configuration list for PBXProject "minirclogger" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C97B1D752736DB770018C9AD;
+			productRefGroup = C97B1D822736DB770018C9AD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C97B1D802736DB770018C9AD /* minirclogger */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C97B1D7A2736DB770018C9AD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --xcbp-logos\n/opt/iOSOpenDev/bin/iosod --arm64e-legacy-prebuild\n";
+		};
+		C97B1D7E2736DB770018C9AD /* arm64e build */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "arm64e build";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "/opt/iOSOpenDev/bin/iosod --arm64e-legacy-postbuild\n";
+		};
+		C97B1D7F2736DB770018C9AD /* Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Package;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#/opt/iOSOpenDev/bin/iosod --simject-helper\n\nbuiltpath=\"${BUILD_DIR}/${CONFIGURATION}${EFFECTIVE_PLATFORM_NAME}/${CONTENTS_FOLDER_PATH}\"\n\ncp \"$builtpath/minirclogger.dylib\" \"${PROJECT_DIR}/minirclogger/Package/Library/MobileSubstrate/DynamicLibraries/\"\n\nldid2 -S  \"${PROJECT_DIR}/minirclogger/Package/Library/MobileSubstrate/DynamicLibraries/minirclogger.dylib\"\n\n/opt/iOSOpenDev/bin/iosod build -p \"${PROJECT_DIR}/minirclogger/PackageVersion.plist\" \"${PROJECT_DIR}/minirclogger/Package\" \"${PROJECT_DIR}/Packages\"\n\necho \"BUILT IT!\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C97B1D7B2736DB770018C9AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C97B1D902736DB770018C9AD /* minirclogger.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C97B1D952736DB770018C9AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(SDKROOT)/System/Library/PrivateFrameworks";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(THEOS)/vendor/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LIBRARY_SEARCH_PATHS = "$(THEOS)/vendor/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				THEOS = /opt/theos;
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		C97B1D962736DB770018C9AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				EXCLUDED_RECURSIVE_SEARCH_PATH_SUBDIRECTORIES = "*.nib *.lproj *.gch (*) .DS_Store CVS .svn .git .hg *.xcodeproj *.xcode *.pbproj *.pbxproj";
+				FRAMEWORK_SEARCH_PATHS = "$(SDKROOT)/System/Library/PrivateFrameworks";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(THEOS)/vendor/include/**";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LIBRARY_SEARCH_PATHS = "$(THEOS)/vendor/lib/**";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				THEOS = /opt/theos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C97B1D982736DB770018C9AD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "minirclogger/minirclogger-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos12.2;
+				SIMJECT = NO;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = 192.168.0.0;
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Debug;
+		};
+		C97B1D992736DB770018C9AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				ENABLE_BITCODE = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "minirclogger/minirclogger-Prefix.pch";
+				INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/iOSOpenDev/lib,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos12.2;
+				SIMJECT = NO;
+				iOSOpenDevBuildPackageOnAnyBuild = NO;
+				iOSOpenDevCopyOnBuild = NO;
+				iOSOpenDevDevice = 192.168.0.0;
+				iOSOpenDevInstallOnAnyBuild = NO;
+				iOSOpenDevInstallOnProfiling = NO;
+				iOSOpenDevRespringOnInstall = YES;
+				iOSOpenDevUsePackageVersionPList = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C97B1D792736DB770018C9AD /* Build configuration list for PBXProject "minirclogger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C97B1D952736DB770018C9AD /* Debug */,
+				C97B1D962736DB770018C9AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C97B1D972736DB770018C9AD /* Build configuration list for PBXNativeTarget "minirclogger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C97B1D982736DB770018C9AD /* Debug */,
+				C97B1D992736DB770018C9AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C97B1D762736DB770018C9AD /* Project object */;
+}

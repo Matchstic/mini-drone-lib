@@ -1,0 +1,17 @@
+Package: com.matchstic.minirclogger
+Name: minirclogger
+Version: 0.0.1-2
+Description: 
+Section: System
+Depends: firmware (>= 9.0), mobilesubstrate
+Conflicts: 
+Replaces: 
+Priority: optional
+Architecture: iphoneos-arm
+Author: Matt Clarke
+dev: 
+Homepage: 
+Depiction: 
+Maintainer: 
+Icon: 
+

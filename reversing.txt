@@ -1,0 +1,109 @@
+Findings
+========
+
+Two sockets, UDP and TCP
+
+UDP:8080 appears to be remote control. TCP:8888 for video control + heartbeat (for video?)
+
+UDP socket is bi-directional and will have replies for commands like <42>.
+
+Connection setup protocol (all UDP?)
+==============================
+
+Create recieve UDP socket on port 8081 - why?
+
+// very early stuff but where started?
+send <0fc0a801 01> to remote on port 8080 (sets controller ID?)
+send <42> - request video type
+await recieve on socket connection (example: <56535647 4100>)
+send <28> - request firmware version
+await recieve on socket connection (example: <56362e31 00>)
+
+Then, when the socket callback for connected happens
+send <64617465 202d7320 22323032 312d3131 2d303620 31383a32 323a3335 22> to set date (equivalent: date -s "2021-11-06 18:22:35")
+send <26e50700 000b0000 00060000 00000000 00120000 00160000 00230000 00> (no idea what this does)
+
+appears to be sending <28> every 10ms for some reason (keepalive?)
+
+Sending a control format message will switch the drone to a connected state.
+This should be the default state, <ff087f40 40401010 100187>
+
+heartbeat
+=========
+
+send <00010203 04050607 08092525> to TCP port every 100ms
+
+Arming
+======
+
+appears to be automatic - as soon as throttle goes up, arming happens.
+what happens if throttle remains up for > 1 second? assume the drone will start liftoff?
+
+**** Control format ****
+========================
+
+ff  08    [00] <- [7f] -> [ff]   [00 - 7f]   [00 - 7f]   [00 - 7f]        10              10             10                    01                       [00] <- [87] -> [ff]
+
+header          throttle            yaw        pitch       roll       left trim       pitch? trim    right trim      flags (eg stop/fly/headless)         throttle related
+
+Note: pitch 0 == pitch forward
+      roll 0  == roll left
+      
+What is that last param? It combines all the throttle/yaw/pitch/roll/trims and is inversely proportional to each one
+
+examples
+<ff087f40 477f1010 100141> -> roll right only
+<ff08ff3b 40401010 10010c> -> throttle max (and slight yaw)
+
+Flags
+=====
+
+0x[?]0 = slow speed
+0x[?]1 = mid speed
+0x[?]2 = fast speed
+0x[?]4 = reverse fly (?)
+0x[?]8 = return (?)
+0x1[?] = headless mode
+0x2[?] = stop motors
+0x4[?] = start flight
+0x8[?] = land
+
+Data types
+==========
+
+throttle = unsigned int
+pitch/roll/yaw = char
+
+Throttle up
+===========
+
+<ff087f40 40401010 100187>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff087f40 40401010 100187>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff088739 40401010 100186>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff088739 40401010 100186>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff08a33a 40401010 100169>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff08d33a 40401010 100139>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff08ff3b 40401010 10010c>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+<ff087f40 40401010 100187>, host 192.168.1.1, port 8080, timeout -1.000000, tag: 10000
+
+essentially, send <ff087f40 40401010 100187> on UDP for mid throttle
+<ff08ff3b 40401010 10010c> is near to max up
+
+gotta keep sending this pattern every 10ms no matter the state
+
+Throttle down
+=============
+
+<ff087f40 40401010 100187>
+<ff087f3c 40401010 10018b>
+<ff084340 40401010 1001c3>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff08003d 40401010 100109>
+<ff087f40 40401010 100187>
