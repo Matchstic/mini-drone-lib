@@ -44,7 +44,7 @@ what happens if throttle remains up for > 1 second? assume the drone will start 
 
 ff  08    [00] <- [7f] -> [ff]   [00 - 7f]   [00 - 7f]   [00 - 7f]        10              10             10                    01                       [00] <- [87] -> [ff]
 
-header          throttle            yaw        pitch       roll       left trim       pitch? trim    right trim      flags (eg stop/fly/headless)         throttle related
+header          throttle            yaw        pitch       roll       left trim       pitch? trim    right trim      flags (eg stop/fly/headless)         checksum?
 
 Note: pitch 0 == pitch forward
       roll 0  == roll left
