@@ -2,7 +2,12 @@
 
 Mega barebones right now. This repo contains utils allowing you to control toy drones over WiFi that make use of the "MINI RC" app (or its many re-skins).
 
-Need `pip install getkey` to run `localcontrol.py`. Keyboard control with arrow keys for now -> up/down is throttle, left/right is roll.
+Need `pip install getkey` to run `localcontrol.py`. Keyboard controls:
+
+- throttle -> arrow up/arrow down
+- roll     -> arrow left/arrow right
+- pitch    -> W/S
+- yaw      -> A/D
 
 ### Knowledge source
 
