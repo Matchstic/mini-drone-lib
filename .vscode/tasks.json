@@ -1,0 +1,40 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "imu-test",
+            "command": ".bin/pyboard.py",
+            "args": [
+                "-d",
+                "/dev/tty.usbserial-0238732D",
+                "imutest.py"
+            ],
+            "type": "shell",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run gesture-control",
+            "command": ".bin/pyboard.py",
+            "args": [
+                "-d",
+                "/dev/tty.usbserial-0238732D",
+                "gesture-control.py"
+            ],
+            "type": "shell",
+            "problemMatcher": []
+        },
+        {
+            "label": "Deploy gesture-control",
+            "command": ".bin/deploy.sh",
+            "args": [],
+            "type": "shell"
+        },
+        {
+            "label": "Deploy dependencies",
+            "command": ".bin/deps.sh",
+            "args": [],
+            "type": "shell",
+            "problemMatcher": []
+        }
+    ]
+}
