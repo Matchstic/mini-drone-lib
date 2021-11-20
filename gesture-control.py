@@ -3,6 +3,7 @@ import socket
 import time
 import math
 import network
+import sys
 
 from bno055 import *
 import machine
@@ -37,7 +38,7 @@ def generateSecondSetupCommand():
 
     return b'\x26\xe5\x07\x00\x00' + struct.pack('IIIIII', int(param1), int(param2), int(param3), int(param4), int(param5), int(param6))
 
-def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, leftTrim = 0x10, rightTrim = 0x10, pitchTrim = 0x10):
+def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, throttleTrim = 0x10, rollTrim = 0x10, pitchTrim = 0x10):
     # params are floats between 0.0 and 1.0
 
     # throttle is 2 bytes between 003d and ff3b
@@ -61,20 +62,20 @@ def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, leftTrim 
     if yawScaled >= 0x7e: yawScaled = 0x7f
     elif yawScaled < 0x00: yawScaled = 0x00
 
-    endByte = endByteCalc(int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, rightTrim, pitchTrim, command)
+    endByte = endByteCalc(int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), throttleTrim, rollTrim, pitchTrim, command)
     if endByte < 0x0:
         endByte = 0x0 - endByte
     elif endByte > 0xff:
         endByte = endByte - 0xff - 1
 
-    return header + struct.pack('BBBBBBBBB', int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, pitchTrim, rightTrim, command, int(endByte))
+    return header + struct.pack('BBBBBBBBB', int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), throttleTrim, pitchTrim, rollTrim, command, int(endByte))
 
 # No idea what this value represents, but this appears to calculate it correctly
-def endByteCalc(throttle, yaw, pitch, roll, leftTrim, rightTrim, pitchTrim, command):
-    return 0x87 + (0x7f - throttle) + (0x40 - yaw) + (0x40 - pitch) + (0x40 - roll) + (0x10 - leftTrim) + (0x10 - rightTrim) + (0x10 - pitchTrim) + (0x01 + command)
+def endByteCalc(throttle, yaw, pitch, roll, throttleTrim, rollTrim, pitchTrim, command):
+    return 0x87 + (0x7f - throttle) + (0x40 - yaw) + (0x40 - pitch) + (0x40 - roll) + (0x10 - throttleTrim) + (0x10 - rollTrim) + (0x10 - pitchTrim) + (0x01 - command)
 
 def generateTakeoffCommand():
-    return generateControlCommand(0.5, 0.5, 0.5, 0.5, 0x41)
+    return b'\xff\x08\x7f\x40\x40\x40\x90\x10\x10\x41\xc7'
 
 #############################################################################
 # Control logic
@@ -110,7 +111,7 @@ def computeControlState():
     global throttleManager
 
     rollFactor = 180
-    pitchFactor = 180
+    pitchFactor = 155
 
     yaw = 0.5
 
@@ -122,7 +123,7 @@ def computeControlState():
 
     zVel = (ACCEL_VEL_TRANSITION * z / math.cos(DEG_2_RAD * z)) * 1000.0
 
-    throttleManager.tick(zVel, 1.2)
+    throttleManager.tick(zVel, 2.2)
     throttle = throttleManager.compute()
 
     if throttle > 1.0: throttle = 1.0
@@ -205,9 +206,10 @@ if __name__ == '__main__':
             if state == State.INIT:
                 dotstar[0] = (128, 0, 0) # Red
 
-                #if imu.calibrated() == False:
-                    #state = State.CALIBRATION
-                    #continue
+                [system, gyro, acc, mag] = imu.cal_status()
+                if gyro != 3 or acc != 3:
+                    state = State.CALIBRATION
+                    continue
 
                 wlan = network.WLAN(network.STA_IF)
                 if wlan.isconnected():
@@ -300,10 +302,17 @@ if __name__ == '__main__':
                     continue
 
                 [throttle, pitch, roll, yaw] = computeControlState()
-                if throttle > 0.8:
+                if roll != 0.5:
                     print('Sending takeoff command')
-                    controlPacket = generateTakeoffCommand()
-                    safeSend(controlPacket)
+
+                    startTime = time.ticks_ms()
+
+                    while time.ticks_diff(time.ticks_ms(), startTime) < 500:
+                        controlPacket = generateTakeoffCommand()
+                        safeSend(controlPacket)
+
+                        print(''.join('{:02x}'.format(x) for x in controlPacket))
+                        time.sleep(0.01)
 
                     state = State.CONTROL_LOOP
                 else:
@@ -330,7 +339,7 @@ if __name__ == '__main__':
                     time.sleep(1)
 
                     # Check status
-                    [sys, gyro, acc, mag] = imu.cal_status()
+                    [system, gyro, acc, mag] = imu.cal_status()
                     if gyro != 3 or acc != 3:
                         print('FAILED CALIBRATION! Please run calibration.py')
                     else:

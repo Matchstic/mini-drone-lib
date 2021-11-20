@@ -23,10 +23,18 @@ I built this by reverse engineering the mentioned "MINI RC" app; via static anal
 4. Takeoff with up arrow (will set throttle to 80%)
 5. Land with down arrow
 
+### Usage (remote)
 
-### Deployment
+0. Update scripts in `.bin/` to reflect the TTY of your board
+1. Deploy dependencies to ESP32 -> `.bin/deps.sh`
+2. Setup calibration of the IMU -> `.bin/pyboard.py -d /dev/<tty_of_board> calibration.py`
+3. Deploy main application      -> `.bin/deploy.sh`
 
-To deploy everything to your ESP32 device, run `.bin/deploy.sh`
+The drone should change visual state as if you'd connected a real controller to it.
+
+To takeoff, move the IMU in a sharp upwards motion.
+
+Flip the IMU upside down to force motors to 0% speed.
 
 ### License
 

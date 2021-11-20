@@ -24,23 +24,21 @@ class Throttle():
     waitStart     = 0
     waitDuration  = 0
     peakStart     = 0
+    peakSeenMin   = False
 
     PEAK_TIMEOUT  = 500
 
     def tick(self, vel, midpoint):
-        computed = 0
-        if vel > 0:
-            computed = ((vel * 1.4) + 100) / 200.0
-        elif vel < 0:
-            computed = ((vel * 1.8) + 100) / 200.0
+        computed = ((vel * 2.1) + 100) / 200.0
 
         # State handling
         if self.state == Throttle.BASE:
-            if vel > midpoint:
+            # Check that previous values are also matching these conditions
+            if vel > midpoint and sum(self.previous) > midpoint:
                 self.state = Throttle.PEAK
                 self.direction = 1
                 self.peakStart = time.ticks_ms()
-            elif vel < 0 - midpoint:
+            elif vel < 0 - midpoint and sum(self.previous) < 0 - midpoint:
                 self.state = Throttle.PEAK
                 self.direction = -1
                 self.peakStart = time.ticks_ms()
@@ -68,12 +66,10 @@ class Throttle():
 
             diff = time.ticks_diff(time.ticks_ms(), self.peakStart)
 
-            if (vel > 0 - midpoint and vel < midpoint and allInBounds) or diff > Throttle.PEAK_TIMEOUT:
+            if (vel > 0 - midpoint / 2 and vel < midpoint and allInBounds) or diff > Throttle.PEAK_TIMEOUT:
                 # reset to baseline
                 #self.waitStart = time.ticks_ms()
                 #self.waitDuration = abs(((self.value - 0.5) * 2) * 50) + 40
-
-                #print('>>>> RESET WITH duration: ' + str(self.waitDuration))
 
                 #self.state = Throttle.WAIT
 
@@ -90,7 +86,7 @@ class Throttle():
                 self.value = 0.5
                 self.peakValue = 0.0
 
-        if len(self.previous) >= 5:
+        if len(self.previous) >= 3:
             self.previous.pop()
 
         self.previous.append(vel)
