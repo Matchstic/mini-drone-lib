@@ -7,6 +7,7 @@ import network
 from bno055 import *
 import machine
 from dotstar import DotStar
+from throttle import Throttle
 
 WIRELESS_SSID = 'MINI RC_6DC444'
 
@@ -60,7 +61,7 @@ def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, leftTrim 
     if yawScaled >= 0x7e: yawScaled = 0x7f
     elif yawScaled < 0x00: yawScaled = 0x00
 
-    endByte = endByteCalc(int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, rightTrim, pitchTrim)
+    endByte = endByteCalc(int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, rightTrim, pitchTrim, command)
     if endByte < 0x0:
         endByte = 0x0 - endByte
     elif endByte > 0xff:
@@ -69,8 +70,11 @@ def generateControlCommand(throttle, pitch, roll, yaw, command = 0x01, leftTrim 
     return header + struct.pack('BBBBBBBBB', int(throttleScaled), int(yawScaled), int(pitchScaled), int(rollScaled), leftTrim, pitchTrim, rightTrim, command, int(endByte))
 
 # No idea what this value represents, but this appears to calculate it correctly
-def endByteCalc(throttle, yaw, pitch, roll, leftTrim, rightTrim, pitchTrim):
-    return 0x87 + (0x7f - throttle) + (0x40 - yaw) + (0x40 - pitch) + (0x40 - roll) + (0x10 - leftTrim) + (0x10 - rightTrim) + (0x10 - pitchTrim)
+def endByteCalc(throttle, yaw, pitch, roll, leftTrim, rightTrim, pitchTrim, command):
+    return 0x87 + (0x7f - throttle) + (0x40 - yaw) + (0x40 - pitch) + (0x40 - roll) + (0x10 - leftTrim) + (0x10 - rightTrim) + (0x10 - pitchTrim) + (0x01 + command)
+
+def generateTakeoffCommand():
+    return generateControlCommand(0.5, 0.5, 0.5, 0.5, 0x41)
 
 #############################################################################
 # Control logic
@@ -83,8 +87,9 @@ class State():
     SOCKET_CREATE     = 3
     SOCKET_CONNECTING = 4
     SOCKET_CONNECTED  = 5
-    CONTROL_LOOP      = 6
-    CALIBRATION       = 7
+    TAKEOFF           = 6
+    CONTROL_LOOP      = 7
+    CALIBRATION       = 8
 
 # Current application state - start at connecting to the remote socket for
 # local control
@@ -99,133 +104,6 @@ i2c = machine.SoftI2C(scl=machine.Pin(22), sda=machine.Pin(21), timeout=1000)
 imu = BNO055(i2c)
 spi = machine.SoftSPI(sck=machine.Pin(12), mosi=machine.Pin(13), miso=machine.Pin(18))
 dotstar = DotStar(spi, 1)
-
-throttleStartTime = 0
-throttleMagnitude = 0
-throttleSign      = 0
-throttleValue     = 0.5
-throttleAcc       = 0
-
-'''
-Throttle is driven by linear acceleration in the z axis.
-
-The idea is that the user's movement is tracked to find the peak
-acceleration before movement slows again. This is then translated
-into a decay function, which reduces the throttle over time.
-
-The greater the acceleration, the longer this decay occurs, resulting
-in a longer period of acceleration on the remote hardware. As a result,
-this produces a larger vertical translation.
-'''
-class Throttle():
-    MINIMUM       = 0
-    PEAK_POS      = 1
-    PEAK_NEG      = 2
-    DECAY         = 3
-
-    NEXT_PEAK_POS = 1
-    NEXT_PEAK_NONE = 0
-    NEXT_PEAK_NEG = -1
-
-    INITIAL_SCALE = 2.5
-
-    state = MINIMUM
-    nextPeakState = NEXT_PEAK_NONE
-
-    lastPeakAcc   = 0
-    value         = 0.5
-    decayStart    = 0
-    decayModifier = 0.5
-    decayFn       = lambda time : 0.5
-    decayExit     = lambda value : True
-
-    def applyScale(self, x, scaleFactor):
-        pow = 0
-        if x < 0:
-            pow = -((-x) ** scaleFactor)
-        elif x > 0:
-            pow = x ** scaleFactor
-
-        res = (pow + 64.0) / 128.0
-
-        if res > 1.0: res = 1.0
-        elif res < 0.0: res = 0.0
-
-        return res
-
-    def tick(self, acc, midpoint):
-        if self.state == Throttle.MINIMUM:
-
-            # If beyond the midpoint value, then start trying to record the current peak
-            # in this acceleration phase. Additionally, record which direction the acceleration
-            # is heading
-            if acc > midpoint:
-                self.nextPeakState = Throttle.NEXT_PEAK_POS
-                if acc > self.lastPeakAcc:
-                    self.lastPeakAcc = acc
-                    self.value = self.applyScale(acc, Throttle.INITIAL_SCALE)
-
-                    print('new peak acc (pos),' + str(self.lastPeakAcc) + ',' + str(self.value))
-
-            elif acc < 0 - midpoint:
-                self.nextPeakState = Throttle.NEXT_PEAK_NEG
-                if acc < self.lastPeakAcc:
-                    self.lastPeakAcc = acc
-                    self.value = self.applyScale(acc, Throttle.INITIAL_SCALE) * 0.7
-
-                    print('new peak acc (neg),' + str(self.lastPeakAcc) + ',' + str(self.value))
-
-            elif self.nextPeakState != Throttle.NEXT_PEAK_NONE:
-                # Move to peak state now that we're at midpoint again
-                self.state = Throttle.PEAK_POS if self.nextPeakState == Throttle.NEXT_PEAK_POS else Throttle.PEAK_NEG
-
-                self.lastPeakAcc = 0
-                self.nextPeakState = Throttle.NEXT_PEAK_NONE
-
-        elif self.state == Throttle.PEAK_POS:
-            # Setup the decay phase
-
-            self.decayModifier = self.value
-            self.decayFn       = lambda time : 0.4 * ((0.0 - (time ** 3))) + self.decayModifier
-            self.decayExit     = lambda value : value < 0.56
-            self.decayStart = time.ticks_ms()
-
-            self.state = Throttle.DECAY
-
-        elif self.state == Throttle.PEAK_NEG:
-            # Setup the decay phase
-
-            self.decayModifier = self.value
-            self.decayFn       = lambda time : (0.4 * (time ** 3)) + self.decayModifier
-            self.decayExit     = lambda value : value > 0.44
-            self.decayStart = time.ticks_ms()
-
-            self.state = Throttle.DECAY
-
-        elif self.state == Throttle.DECAY:
-            # Compute the decay
-
-            # New movement during decay, cycle back around and restart
-            #if acc > midpoint or acc < 0.0 - midpoint:
-            #    print('Midpoint exceeded during decay, restart')
-            #    self.state = Throttle.MINIMUM
-            #    self.tick(acc, midpoint)
-            #
-            #    return
-
-            # Compute decayed throttle value, and exit if needed
-            diff = time.ticks_diff(time.ticks_ms(), self.decayStart) / 1000.0
-            self.value = self.decayFn(diff)
-
-            if self.decayExit(self.value):
-                self.value = 0.5
-                self.state = Throttle.MINIMUM
-
-            print('decayed,' + str(acc) + ',' + str(self.value))
-
-    def compute(self):
-        return self.value
-
 throttleManager = Throttle()
 
 def computeControlState():
@@ -239,8 +117,23 @@ def computeControlState():
     [x,y,z] = imu.lin_acc()
     [heading, roll, pitch] = imu.euler()
 
-    throttleManager.tick(z, 0.3)
+    ACCEL_VEL_TRANSITION =  10.0 / 1000.0
+    DEG_2_RAD = 0.01745329251
+
+    zVel = (ACCEL_VEL_TRANSITION * z / math.cos(DEG_2_RAD * z)) * 1000.0
+
+    throttleManager.tick(zVel, 1.2)
     throttle = throttleManager.compute()
+
+    if throttle > 1.0: throttle = 1.0
+    elif throttle < 0.0: throttle = 0.0
+    elif throttle > 0.48 and throttle < 0.52: throttle = 0.5
+
+    # print(str(zVel) + ',' + str(throttle))
+
+    if abs(pitch) > 120:
+        print('ABORT ABORT ABORT')
+        return [0.0, 0.5, 0.5, 0.5]
 
     # Euler angle handling
     roll = 1.0 - ((roll / rollFactor) + 0.5)
@@ -251,7 +144,7 @@ def computeControlState():
     pitch = 1.0 - ((pitch / pitchFactor) + 0.5)
     if pitch > 1.0: pitch = 1.0
     elif pitch < 0.0: pitch = 0.0
-    elif pitch > 0.44 and pitch < 0.56: roll = 0.5
+    elif pitch > 0.44 and pitch < 0.56: pitch = 0.5
 
     return [throttle, pitch, roll, yaw]
 
@@ -312,9 +205,9 @@ if __name__ == '__main__':
             if state == State.INIT:
                 dotstar[0] = (128, 0, 0) # Red
 
-                if imu.calibrated() == False:
-                    state = State.CALIBRATION
-                    continue
+                #if imu.calibrated() == False:
+                    #state = State.CALIBRATION
+                    #continue
 
                 wlan = network.WLAN(network.STA_IF)
                 if wlan.isconnected():
@@ -399,7 +292,23 @@ if __name__ == '__main__':
                 safeSendTcp(generateHeartbeatCommand())
                 print('TCP recv: ' + recieveTcp(20).decode('ascii'))
 
-                state = State.CONTROL_LOOP
+                state = State.TAKEOFF
+
+            elif state == State.TAKEOFF:
+                if not wlan.isconnected():
+                    state = State.CONNECTING_WIFI
+                    continue
+
+                [throttle, pitch, roll, yaw] = computeControlState()
+                if throttle > 0.8:
+                    print('Sending takeoff command')
+                    controlPacket = generateTakeoffCommand()
+                    safeSend(controlPacket)
+
+                    state = State.CONTROL_LOOP
+                else:
+                    controlPacket = generateControlCommand(0.5, 0.5, 0.5, 0.5)
+                    safeSend(controlPacket)
 
             elif state == State.CONTROL_LOOP:
                 if not wlan.isconnected():
@@ -410,13 +319,27 @@ if __name__ == '__main__':
                 controlPacket = generateControlCommand(throttle, pitch, roll, yaw)
                 safeSend(controlPacket)
 
-                # print('sent ' + str(controlPacket))
             elif state == State.CALIBRATION:
-                [sys, gyro, accel, mag] = imu.cal_status()
-                print('Calibration required: sys {} gyro {} accel {} mag {}'.format(*imu.cal_status()))
+                try:
+                    f = open('calibration.bin', 'r')
+                    bytes = bytearray(f.read())
+                    f.close()
 
-                if accel == 3:
-                    state = State.INIT
+                    imu.setOffsets(bytes)
+
+                    time.sleep(1)
+
+                    # Check status
+                    [sys, gyro, acc, mag] = imu.cal_status()
+                    if gyro != 3 or acc != 3:
+                        print('FAILED CALIBRATION! Please run calibration.py')
+                    else:
+                        print('Loaded calibration from file')
+                        state = State.INIT
+
+                except Exception as e:
+                    print(e)
+                    print('FAILED CALIBRATION! Please run calibration.py')
 
         except Exception as e:
             print(e)
