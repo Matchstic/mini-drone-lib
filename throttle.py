@@ -24,21 +24,24 @@ class Throttle():
     waitStart     = 0
     waitDuration  = 0
     peakStart     = 0
-    peakSeenMin   = False
+    peakToggled   = False
 
     PEAK_TIMEOUT  = 500
 
+    def sign(self, value):
+        return (value > 0) - (value < 0)
+
     def tick(self, vel, midpoint):
-        computed = ((vel * 2.1) + 100) / 200.0
+        computed = ((vel * 1.82) + 100) / 200.0
 
         # State handling
         if self.state == Throttle.BASE:
             # Check that previous values are also matching these conditions
-            if vel > midpoint and sum(self.previous) > midpoint:
+            if vel > midpoint:
                 self.state = Throttle.PEAK
                 self.direction = 1
                 self.peakStart = time.ticks_ms()
-            elif vel < 0 - midpoint and sum(self.previous) < 0 - midpoint:
+            elif vel < 0 - midpoint:
                 self.state = Throttle.PEAK
                 self.direction = -1
                 self.peakStart = time.ticks_ms()
@@ -66,16 +69,23 @@ class Throttle():
 
             diff = time.ticks_diff(time.ticks_ms(), self.peakStart)
 
-            if (vel > 0 - midpoint / 2 and vel < midpoint and allInBounds) or diff > Throttle.PEAK_TIMEOUT:
-                # reset to baseline
-                #self.waitStart = time.ticks_ms()
-                #self.waitDuration = abs(((self.value - 0.5) * 2) * 50) + 40
-
-                #self.state = Throttle.WAIT
-
+            if diff > Throttle.PEAK_TIMEOUT:
                 self.state = Throttle.BASE
                 self.value = 0.5
                 self.peakValue = 0.0
+                self.peakToggled = False
+            elif self.sign(vel) != self.sign(self.peakValue):
+                # Switched over now
+                self.peakToggled = True
+            elif (self.peakToggled and
+                  self.sign(vel) == self.sign(self.peakValue) and
+                  vel > 0 - (midpoint / 2) and
+                  vel < (midpoint / 2) and
+                  allInBounds):
+
+                self.waitStart = time.ticks_ms()
+                self.waitDuration = abs(((self.value - 0.5) * 2) * 90) + 40
+                self.state = Throttle.WAIT
 
         elif self.state == Throttle.WAIT:
             diff = time.ticks_diff(time.ticks_ms(), self.waitStart)
@@ -85,6 +95,7 @@ class Throttle():
                 self.state = Throttle.BASE
                 self.value = 0.5
                 self.peakValue = 0.0
+                self.peakToggled = False
 
         if len(self.previous) >= 3:
             self.previous.pop()

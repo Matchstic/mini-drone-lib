@@ -123,17 +123,14 @@ def computeControlState():
 
     zVel = (ACCEL_VEL_TRANSITION * z / math.cos(DEG_2_RAD * z)) * 1000.0
 
-    throttleManager.tick(zVel, 2.2)
+    throttleManager.tick(zVel, 4)
     throttle = throttleManager.compute()
 
     if throttle > 1.0: throttle = 1.0
     elif throttle < 0.0: throttle = 0.0
     elif throttle > 0.48 and throttle < 0.52: throttle = 0.5
 
-    # print(str(zVel) + ',' + str(throttle))
-
     if abs(pitch) > 120:
-        print('ABORT ABORT ABORT')
         return [0.0, 0.5, 0.5, 0.5]
 
     # Euler angle handling
