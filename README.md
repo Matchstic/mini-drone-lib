@@ -1,6 +1,8 @@
 ## MINI RC -based drone control
 
-Mega barebones right now. This repo contains utils allowing you to control toy drones over WiFi that make use of the "MINI RC" app (or its many re-skins).
+Mega barebones right now. Please bear with me as I build out this repo, as well as improving documentation.
+
+This repo contains utils allowing you to control toy drones over WiFi that make use of the "MINI RC" app (or its many re-skins).
 
 Need `pip install getkey` to run `localcontrol.py`. Keyboard controls:
 
