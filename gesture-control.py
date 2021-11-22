@@ -130,7 +130,7 @@ def computeControlState():
     elif throttle < 0.0: throttle = 0.0
     elif throttle > 0.48 and throttle < 0.52: throttle = 0.5
 
-    if abs(pitch) > 120:
+    if abs(pitch) > 140:
         return [0.0, 0.5, 0.5, 0.5]
 
     # Euler angle handling
