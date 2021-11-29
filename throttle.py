@@ -32,8 +32,6 @@ class Throttle():
         return (value > 0) - (value < 0)
 
     def tick(self, vel, midpoint):
-        computed = ((vel * 1.82) + 100) / 200.0
-
         # State handling
         if self.state == Throttle.BASE:
             # Check that previous values are also matching these conditions
@@ -59,7 +57,7 @@ class Throttle():
             # Only change current throttle when heading towards peak, and ignore
             # lower values when velocity is dropped due to reduced motion.
             if not directionCheck:
-                self.value = computed
+                self.value = ((self.peakValue * 1.82) + 100) / 200.0
 
             # Check previous and current, then see if we're in the endgame
             allInBounds = True
@@ -84,7 +82,7 @@ class Throttle():
                   allInBounds):
 
                 self.waitStart = time.ticks_ms()
-                self.waitDuration = abs(((self.value - 0.5) * 2) * 90) + 40
+                self.waitDuration = abs(((self.value - 0.5) * 2) * 120) + 60
                 self.state = Throttle.WAIT
 
         elif self.state == Throttle.WAIT:
