@@ -10,7 +10,7 @@ def main():
         time.sleep(0.1)
         if not imu.calibrated():
             # Do calibration routine, and save sensor offsets
-            print('Calibration required: sys {} gyro {} accel {} mag {}'.format(*imu.cal_status()))
+            print('Calibration status: sys {} gyro {} accel {} mag {}'.format(*imu.cal_status()))
 
         else:
             # Save offsets to file, and exit

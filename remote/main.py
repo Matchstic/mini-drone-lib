@@ -3,7 +3,6 @@ import socket
 import time
 import math
 import network
-import sys
 
 from bno055 import *
 import machine
