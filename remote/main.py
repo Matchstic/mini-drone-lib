@@ -307,8 +307,6 @@ if __name__ == '__main__':
                     while time.ticks_diff(time.ticks_ms(), startTime) < 500:
                         controlPacket = generateTakeoffCommand()
                         safeSend(controlPacket)
-
-                        print(''.join('{:02x}'.format(x) for x in controlPacket))
                         time.sleep(0.01)
 
                     state = State.CONTROL_LOOP

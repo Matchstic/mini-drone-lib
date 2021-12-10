@@ -1,0 +1,3 @@
+[submodule "remote/micropython-bno055"]
+	path = remote/micropython-bno055
+	url = https://github.com/micropython-IMU/micropython-bno055.git

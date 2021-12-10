@@ -4,3 +4,4 @@ working/
 *.dylib
 *.mm
 *.deb
+**/__pycache__
