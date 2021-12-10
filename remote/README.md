@@ -1,4 +1,4 @@
-### ESP32 and BNO055 motion control
+## ESP32 and BNO055 motion control
 
 This package contains all code necessary to control a MINIRC-based drone from inside **MicroPython**.
 
@@ -9,9 +9,9 @@ For my own setup, I used the following components:
 - [TinyPICO V2](https://www.tinypico.com/)
 - [BNO055 board](https://www.adafruit.com/product/4646)
 
-### Setup procedure
+## Setup procedure
 
-## Repo
+### Repo
 
 This repo makes use of submodules. Make sure they have been downloaded by running:
 
@@ -19,14 +19,14 @@ This repo makes use of submodules. Make sure they have been downloaded by runnin
 $ git submodule init && git submodule update
 ```
 
-## Configuration
+### Configuration
 
 You will need to specify the SSID of your drone in code, before deploying it.
 
 Simply update the value for `WIRELESS_SSID` in `main.py` for this. The wireless network should be
 unencrypted, and not require a passphrase.
 
-## Installation
+### Installation
 
 After you've connected all your components, plug it into your dev machaine, and run the following from this folder:
 
@@ -36,9 +36,9 @@ $ .bin/deploy.sh /dev/<tty of your board>
 
 This will deploy everything to your board, which should then start running everything.
 
-### Usage
+## Usage
 
-## Calibration
+### Calibration
 
 Before you can fly using this setup, you first need to calibrate the IMU.
 
@@ -54,7 +54,7 @@ Follow the calibration instructions found [here](https://www.youtube.com/watch?v
 
 At this point, the calibration state will be written to your board, and the script will exit.
 
-## Flight
+### Flight
 
 Control of the drone is as follows:
 
@@ -72,6 +72,6 @@ Some important considerations:
 
 If wireless connection is lost, due to e.g. turning off the drone, the codebase will switch back to attempting to connect to the drone again.
 
-### Licensing
+## Licensing
 
 All code is available under the GPLv3
