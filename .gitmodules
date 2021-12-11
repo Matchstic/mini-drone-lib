@@ -1,6 +1,6 @@
 [submodule "remote/micropython-bno055"]
 	path = remote/micropython-bno055
-	url = https://github.com/micropython-IMU/micropython-bno055.git
+	url = https://github.com/Matchstic/micropython-bno055.git
 [submodule "remote/micropython-dotstar"]
 	path = remote/micropython-dotstar
 	url = https://github.com/mattytrentini/micropython-dotstar.git
