@@ -45,7 +45,7 @@ Before you can fly using this setup, you first need to calibrate the IMU.
 To do this, make sure your board is connected to your dev machine, then run from this folder:
 
 ```
-$ .bin/pyboard.py -d /dev/<tty of your board> calibration.py
+$ .bin/calibrate.sh /dev/<tty of your board>
 ```
 
 In the terminal, you should see the current calibration status logged to the screen.

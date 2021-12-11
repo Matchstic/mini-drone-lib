@@ -127,7 +127,6 @@ if __name__ == '__main__':
         while True:
 
             if state == State.SOCKET_CREATE:
-                print('Socket created')
 
                 if drone.connect():
                     state = State.SOCKET_CONNECTED
