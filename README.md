@@ -14,7 +14,6 @@ The "MINI RC" app itself is redistributed under other names with whitelabelled b
 - HT SMART
 - Quadrone Hylander
 - MINI ORION FPV
-- MINI RC
 - Polaroid PL300
 - Promark VR
 - RC-PRO
@@ -31,7 +30,8 @@ In *theory* this library should support any small drone that use any of the abov
 but DOES use one of the above apps, please check the host IP address of the drone - if not `192.168.1.1`, make sure to call
 `connect('IP addr')` with the correct address.
 
-**Known Supported Drones**
+### Known Supported Drones
+
 | Name | Link (e.g. Amazon) |
 | ----------- | ----------- |
 | tech rc Mini Drone | https://www.amazon.co.uk/dp/B07SW3YYTQ |
@@ -56,7 +56,7 @@ if drone.connect():
 
 | Method Name | Arguments   | Description | Return value |
 | ----------- | ----------- | ----------- | ------------ |
-| `connect()` | `ip (string)`: IP address of the drone. This is defaults to `192.168.1.1`, but may differ by manufacturer. | Sets up the sockets used for communication to the drone.<br />It is expected that you have already connected to the drone's wireless network ahead of calling this method. | `True` if connection is established, otherwise `False` |
+| `connect()` | `ip (string)`: IP address of the drone. This is defaults to `192.168.1.1`, but may differ by manufacturer. | Sets up the sockets used for communication to the drone.<br /><br />It is expected that you have already connected to the drone's wireless network ahead of calling this method. | `True` if connection is established, otherwise `False` |
 | `setup()` | - | Sends appropriate commands to arm the drone. After arming, videoType and firmware is available.<br /><br />Note: this will raise an exception if connection has been lost. | void |
 | `idle()` | - | Sends an "idle" control command. This is needed for the drone to recognise that you have connected, before calling `takeoff()` or `arm()`.<br /><br />Note: execution time is 0.01s, suitable for calling at 100Hz.<br /><br />Note: this will raise an exception if connection has been lost. | void |
 | `takeoff()` | - | Sends a takeoff command to the drone.<br /><br />You should call this in a loop for as long as you want the takeoff to run. A reasonable loop duration is 500ms.<br /><br />Note: this is not strictly required to start a flight. You can instead call `arm()` then `control()` in sequence, to more finely control the takeoff.<br /><br />Note: this will raise an exception if connection has been lost. | void |
@@ -73,16 +73,16 @@ It has a single dependency, `getkey`, to use the keyboard as the control scheme.
 You'll want to run `pip install getkey` to grab this.
 
 Keyboard controls:
-    ↑ / ↓: Throttle
-    ← / →: Roll
-    W / S: Pitch
-    A / D: Yaw
+- ↑ / ↓: Throttle
+- ← / →: Roll
+- W / S: Pitch
+- A / D: Yaw
 
 ### ESP32 and BNO055
 
 This repo was created as a result of a project to control a toy drone using motion data from a BNO055 IMU.
 
-All code relating to this can be found under [`remote/`](linkme).
+All code relating to this can be found under [`remote/`](remote).
 
 Please check out the YouTube video that corresponds to this:
 
