@@ -2,9 +2,11 @@
 
 This package contains all code necessary to control a MINIRC-based drone from inside **MicroPython**.
 
-It is assumed your hardware is ESP32 based, and you have connected a BNO055 IMU.
+It is assumed your hardware is ESP32 based, and you have connected a BNO055 IMU. If you're not using
+the exact same hardware, just make sure to set the pin values correctly on lines 49 and 50 of
+`main.py`.
 
-For my own setup, I used the following components:
+For my own setup, I used the following hardware:
 
 - [TinyPICO V2](https://www.tinypico.com/)
 - [BNO055 board](https://www.adafruit.com/product/4646)
@@ -47,6 +49,9 @@ To do this, make sure your board is connected to your dev machine, then run from
 ```
 $ .bin/calibrate.sh /dev/<tty of your board>
 ```
+
+This script assumes you are using identical hardware. Otherwise, just make sure to update line 23 of `calibration.py`
+to match your setup.
 
 In the terminal, you should see the current calibration status logged to the screen.
 

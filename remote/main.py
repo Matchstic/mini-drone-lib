@@ -1,3 +1,23 @@
+"""
+Matt Clarke 2021.
+Script using the drone library on an ESP32 device hooked up to a BNO055, for
+full motion control.
+
+You likely will need to tweak lines 49 and 50 to match your hardware
+configuration.
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import time
 import math
 import network
@@ -28,8 +48,8 @@ state = State.INIT
 wlan = None
 
 i2c = machine.SoftI2C(scl=machine.Pin(22), sda=machine.Pin(21), timeout=1000)
-imu = BNO055(i2c)
 spi = machine.SoftSPI(sck=machine.Pin(12), mosi=machine.Pin(13), miso=machine.Pin(18))
+imu = BNO055(i2c)
 dotstar = DotStar(spi, 1)
 throttleManager = Throttle()
 drone = Drone()

@@ -1,17 +1,33 @@
+"""
+Matt Clarke 2021.
+
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <http://www.gnu.org/licenses/>.
+"""
+
 import time
 
-'''
-Throttle is driven by linear acceleration in the z axis.
-
-The idea is that the user's movement is tracked to find the peak
-acceleration before movement slows again. This is then translated
-into a decay function, which reduces the throttle over time.
-
-The greater the acceleration, the longer this decay occurs, resulting
-in a longer period of acceleration on the remote hardware. As a result,
-this produces a larger vertical translation.
-'''
 class Throttle():
+    """
+    Throttle is driven by linear acceleration in the z axis.
+
+    The idea is that the user's movement is tracked to find the peak
+    acceleration before movement slows again. This is then translated
+    into a decay function, which reduces the throttle over time.
+
+    The greater the acceleration, the longer this decay occurs, resulting
+    in a longer period of acceleration on the remote hardware. As a result,
+    this produces a larger vertical translation.
+    """
+
     BASE          = 0
     PEAK          = 1
     WAIT          = 2
