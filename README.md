@@ -86,7 +86,7 @@ All code relating to this can be found under [`remote/`](remote).
 
 Please check out the YouTube video that corresponds to this:
 
-LINKME.
+[![YouTube: I hacked a drone to fly using motion control](https://img.youtube.com/vi/ygtreF12Hks/maxresdefault.jpg)](https://www.youtube.com/watch?v=ygtreF12Hks)
 
 ## Knowledge source
 
