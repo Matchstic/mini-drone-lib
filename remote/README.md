@@ -4,7 +4,7 @@ This package contains all code necessary to control a MINIRC-based drone from in
 
 It is assumed your hardware is ESP32 based, and you have connected a BNO055 IMU. If you're not using
 the exact same hardware, just make sure to set the pin values correctly on lines 49 and 50 of
-`main.py`.
+`main.py`. If your hardware doesn't have a dotstar LED, you can ignore SPI stuff.
 
 For my own setup, I used the following hardware:
 

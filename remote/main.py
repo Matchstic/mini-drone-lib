@@ -48,7 +48,7 @@ state = State.INIT
 wlan = None
 
 i2c = machine.SoftI2C(scl=machine.Pin(22), sda=machine.Pin(21), timeout=1000)
-spi = machine.SoftSPI(sck=machine.Pin(12), mosi=machine.Pin(13), miso=machine.Pin(18))
+spi = machine.SoftSPI(sck=machine.Pin(12), mosi=machine.Pin(2), miso=machine.Pin(19))
 imu = BNO055(i2c)
 dotstar = DotStar(spi, 1)
 throttleManager = Throttle()
