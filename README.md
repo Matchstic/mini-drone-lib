@@ -94,9 +94,15 @@ I built this by reverse engineering the mentioned "MINI RC" app; via static anal
 
 `reversing/minirclogger` is the iOSOpenDev-based tweak used to do runtime analysis.
 
+### Connectivity
+
+The remote drone advertises an unsecured WiFi network at 2.4GHz.
+
+In the case of the drone I used for research, the SSID was of the form `"MINI RC_<3 bytes>"`.
+
 ### Sockets
 
-The remote drone exposes two sockets:
+Two sockets are exposed:
 
 - UDP on port 8080
 - TCP on port 8888
