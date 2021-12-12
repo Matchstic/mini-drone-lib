@@ -73,8 +73,7 @@ Flags
 Data types
 ==========
 
-throttle = unsigned int
-pitch/roll/yaw = char
+all seems to be chars
 
 Throttle up
 ===========
