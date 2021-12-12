@@ -142,7 +142,7 @@ This can be broken down as follows:
 | ------ | -------- | --- | ----- | ---- | ------------- | ---------- | --------- | ----- | -------- |
 | `ff08` | `7f` | `40` | `40` | `40` | `10` | `10` | `10` | `01` | `87` |
 
-Each directly controlled value has slightly different value ranges:
+Each value has slightly different ranges:
 
 | Name | Range | Value at idle |
 | ---- | ----- | ------------- |
